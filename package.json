@@ -1,5 +1,5 @@
 {
-  "name": "json-sass-webpack-plugin",
+  "name": "@wurielle/json-sass-webpack-plugin",
   "version": "0.1.0",
   "homepage": "https://github.com/wurielle/json-sass-webpack-plugin",
   "main": "./json-sass-webpack-plugin.js",
