@@ -1,8 +1,8 @@
 {
   "name": "json-sass-webpack-plugin",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://github.com/wurielle/json-sass-webpack-plugin",
-  "main": "dist/json-sass-webpack-plugin.js",
+  "main": "./json-sass-webpack-plugin.js",
   "dependencies": {
     "minimist": "1.2.0",
     "lodash": "4.17.13",
@@ -12,12 +12,6 @@
   "devDependencies": {},
   "peerDependencies": {},
   "license": "SEE LICENSE IN LICENSE",
-  "bit": {
-    "env": {
-      "compiler": "bit.envs/compilers/babel@0.0.20",
-      "tester": "bit.envs/testers/jest@0.0.34"
-    }
-  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@wurielle"
   }

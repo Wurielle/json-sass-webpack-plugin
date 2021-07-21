@@ -1,199 +1,37 @@
-/**
-
-
- * Exports a JavaScript module to a Sass Variable.
-
-
- * @name JsonSassPlugin
-
-
- * @param {string} srcFile
-
-
- * @param {string} outputFile
-
-
- * @example
-
-
- *  // webpack.config.js
-
-
- *  module.exports = {
-
-
- *      ...
-
-
- *      plugins: [
-
-
- *          ...
-
-
- *          new JsonSassPlugin('./config/theme.js', './config/theme.scss'),
-
-
- *      ]
-
-
- *  }
-
-
- */
-
-
-
-
-
-const fs = require('fs');
-
-
 const path = require('path');
-
-
-
-
-
+const fs = require('fs');
 const jsonSass = require('./json-sass');
+const pluginName = 'JsonSassWebpackPlugin';
 
+class JsonSassWebpackPlugin {
+    options = null;
 
-
-
-
-class JsonSassPlugin {
-
-
-    constructor(src, output, options) {
-
-
-        this.defaultOptions = {};
-
-
-        this.src = src;
-
-
-        this.output = output;
-
-
+    constructor(options) {
         this.options = options;
-
-
     }
-
-
-    throw(err) {
-
-
-        throw err;
-
-
-    }
-
 
     getSass(object) {
-
-
-        return "$"+path.parse(this.src).name.replace(/\./g, '_')+":"+jsonSass.convertJs(object)+";";
-
-
+        return "$" + path.parse(this.options.src).name.replace(/\./g, '_') + ":" + jsonSass.convertJs(object) + ";";
     }
-
-
-    tester() {
-
-
-        return true;
-
-
-    }
-
 
     apply(compiler) {
-
-
-        const src = this.src || this.throw('src is required');
-
-
-        const srcFullPath = path.resolve(process.cwd(), src);
-
-
-        const output = this.output || path.parse(this.src).name+'.scss';
-
-
-        const outputFullPath = path.resolve(process.cwd(), output);
-
-
-
-
-
-        compiler.plugin("watch-run", (compiler, done) => {
-
-
-            const changedFiles = this.getChangedFiles(compiler);
-
-
-            if(changedFiles.some((file) => file === srcFullPath )) {
-
-
-                delete require.cache[srcFullPath];
-
-
-                let themeJS = require(srcFullPath);
-
-
-                let themeSASS = this.getSass(themeJS);
-
-
-                fs.writeFile(outputFullPath, themeSASS, () => {
-
-
-                    done();
-
-
-                });
-
-
-            } else {
-
-
-                done();
-
-
+        compiler.hooks.watchRun.tapAsync(
+            pluginName,
+            (compilation, callback) => {
+                const changedFiles = compilation.modifiedFiles;
+                if (changedFiles && Array.from(changedFiles).some((file) => file === this.options.src)) {
+                    delete require.cache[this.options.src];
+                    const themeJS = require(this.options.src);
+                    const themeSASS = this.getSass(themeJS);
+                    fs.writeFile(this.options.target, themeSASS, function () {
+                        callback();
+                    });
+                } else {
+                    callback();
+                }
             }
-
-
-        });
-
-
+        );
     }
-
-
-
-
-
-    getChangedFiles(compiler) {
-
-
-        const { watchFileSystem } = compiler;
-
-
-        const watcher = watchFileSystem.watcher || watchFileSystem.wfs.watcher;
-
-
-
-
-
-        return Object.keys(watcher.mtimes);
-
-
-    }
-
-
 }
 
-
-
-
-
-module.exports = JsonSassPlugin;
+module.exports = JsonSassWebpackPlugin;
