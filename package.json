@@ -4,7 +4,7 @@
   "homepage": "https://github.com/wurielle/json-sass-webpack-plugin",
   "main": "./json-sass-webpack-plugin.js",
   "dependencies": {
-    "minimist": "1.2.3",
+    "minimist": "1.2.6",
     "lodash": "4.17.21",
     "through2": "0.6.5",
     "chai": "1.10.0"
