@@ -5,7 +5,7 @@
   "main": "./json-sass-webpack-plugin.js",
   "dependencies": {
     "minimist": "1.2.3",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "through2": "0.6.5",
     "chai": "1.10.0"
   },
